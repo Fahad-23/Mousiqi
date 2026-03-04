@@ -4,6 +4,8 @@ A modern YouTube music player built with TypeScript, React, and Fastify.
 
 Search for songs on YouTube, stream audio, and organize your music into playlists.
 
+### [Watch Demo Video](https://drive.google.com/file/d/15-3-MQ3LWkqQGWBu4znCwrXS7D_JIZtI/view?usp=sharing)
+
 ## Tech Stack
 
 - **Backend**: Fastify, TypeScript, Drizzle ORM, PostgreSQL, Redis, yt-dlp
