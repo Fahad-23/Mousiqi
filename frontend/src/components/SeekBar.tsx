@@ -31,7 +31,10 @@ export function SeekBar({ onSeek }: SeekBarProps) {
         max="100"
         value={progress}
         onChange={handleChange}
-        className="flex-1 h-1 appearance-none bg-white/20 rounded-full cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer"
+        className="flex-1 h-1 appearance-none rounded-full cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer"
+        style={{
+          background: `linear-gradient(to right, #a855f7 ${progress}%, rgba(255,255,255,0.2) ${progress}%)`,
+        }}
       />
       <span className="text-xs text-white/50 w-10 tabular-nums">
         {formatTime(duration)}

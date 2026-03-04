@@ -8,15 +8,37 @@ export function AudioPlayer() {
   const {
     currentTrack,
     isPlaying,
+    hasEnded,
     togglePlayPause,
     playNext,
     playPrevious,
     queue,
     queueIndex,
+    loadingTrack,
   } = usePlayerStore();
   const { seek } = useAudioPlayer();
 
   if (!currentTrack) return null;
+
+  // Determine which icon to show
+  const playButtonIcon = hasEnded ? (
+    // Replay icon
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="1 4 1 10 7 10" />
+      <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+    </svg>
+  ) : isPlaying ? (
+    // Pause icon
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <rect x="6" y="4" width="4" height="16" />
+      <rect x="14" y="4" width="4" height="16" />
+    </svg>
+  ) : (
+    // Play icon
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+      <polygon points="5 3 19 12 5 21 5 3" />
+    </svg>
+  );
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-gray-900/95 backdrop-blur border-t border-white/10 px-4 py-3 z-50">
@@ -44,7 +66,7 @@ export function AudioPlayer() {
           <div className="flex items-center gap-4">
             <button
               onClick={playPrevious}
-              disabled={queueIndex <= 0}
+              disabled={queueIndex <= 0 || loadingTrack}
               className="text-white/60 hover:text-white disabled:text-white/20 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -54,22 +76,18 @@ export function AudioPlayer() {
             </button>
             <button
               onClick={togglePlayPause}
-              className="w-10 h-10 flex items-center justify-center bg-white rounded-full text-gray-900 hover:scale-105 transition-transform"
+              disabled={loadingTrack}
+              className="w-10 h-10 flex items-center justify-center bg-white rounded-full text-gray-900 hover:scale-105 transition-transform disabled:opacity-50"
             >
-              {isPlaying ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <rect x="6" y="4" width="4" height="16" />
-                  <rect x="14" y="4" width="4" height="16" />
-                </svg>
+              {loadingTrack ? (
+                <span className="w-5 h-5 border-2 border-gray-400 border-t-gray-900 rounded-full animate-spin" />
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                  <polygon points="5 3 19 12 5 21 5 3" />
-                </svg>
+                playButtonIcon
               )}
             </button>
             <button
               onClick={playNext}
-              disabled={queueIndex >= queue.length - 1}
+              disabled={queueIndex >= queue.length - 1 || loadingTrack}
               className="text-white/60 hover:text-white disabled:text-white/20 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">

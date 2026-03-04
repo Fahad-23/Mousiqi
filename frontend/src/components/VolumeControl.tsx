@@ -2,6 +2,7 @@ import { usePlayerStore } from "../stores/playerStore.ts";
 
 export function VolumeControl() {
   const { volume, setVolume } = usePlayerStore();
+  const volumePercent = Math.round(volume * 100);
 
   return (
     <div className="flex items-center gap-2">
@@ -26,9 +27,12 @@ export function VolumeControl() {
         type="range"
         min="0"
         max="100"
-        value={Math.round(volume * 100)}
+        value={volumePercent}
         onChange={(e) => setVolume(Number(e.target.value) / 100)}
-        className="w-20 h-1 appearance-none bg-white/20 rounded-full cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full"
+        className="w-20 h-1 appearance-none rounded-full cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:rounded-full"
+        style={{
+          background: `linear-gradient(to right, #a855f7 ${volumePercent}%, rgba(255,255,255,0.2) ${volumePercent}%)`,
+        }}
       />
     </div>
   );

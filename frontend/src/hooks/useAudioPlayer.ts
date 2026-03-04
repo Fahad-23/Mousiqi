@@ -6,8 +6,10 @@ export function useAudioPlayer() {
   const {
     currentTrack,
     isPlaying,
+    hasEnded,
     volume,
     setIsPlaying,
+    setHasEnded,
     setCurrentTime,
     setDuration,
   } = usePlayerStore();
@@ -21,7 +23,10 @@ export function useAudioPlayer() {
 
     const onTimeUpdate = () => setCurrentTime(audio.currentTime);
     const onDurationChange = () => setDuration(audio.duration || 0);
-    const onEnded = () => setIsPlaying(false);
+    const onEnded = () => {
+      setIsPlaying(false);
+      setHasEnded(true);
+    };
     const onError = () => {
       console.error("Audio playback error");
       setIsPlaying(false);
@@ -38,7 +43,7 @@ export function useAudioPlayer() {
       audio.removeEventListener("ended", onEnded);
       audio.removeEventListener("error", onError);
     };
-  }, [setCurrentTime, setDuration, setIsPlaying]);
+  }, [setCurrentTime, setDuration, setIsPlaying, setHasEnded]);
 
   // Update source when track changes
   useEffect(() => {
@@ -50,17 +55,21 @@ export function useAudioPlayer() {
     setIsPlaying(true);
   }, [currentTrack?.streamUrl, setIsPlaying]);
 
-  // Play/pause sync
+  // Play/pause sync — also handles replay
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio || !audio.src) return;
 
     if (isPlaying) {
+      // If we're replaying after ended, seek to beginning
+      if (hasEnded || audio.ended) {
+        audio.currentTime = 0;
+      }
       audio.play().catch(() => setIsPlaying(false));
     } else {
       audio.pause();
     }
-  }, [isPlaying, setIsPlaying]);
+  }, [isPlaying, hasEnded, setIsPlaying]);
 
   // Volume sync
   useEffect(() => {
