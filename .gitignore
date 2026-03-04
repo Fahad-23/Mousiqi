@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+Thumbs.db
+
+# Documentation (kept local only)
+docs/
+
+# IDE
+.vscode/
+.idea/
+
+# Build artifacts
+backend/dist/
+frontend/dist/
+
+# Database
+pgdata/
